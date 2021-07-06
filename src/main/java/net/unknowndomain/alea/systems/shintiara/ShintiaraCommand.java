@@ -70,7 +70,7 @@ public class ShintiaraCommand extends RpgSystemCommand
     @Override
     public RpgSystemOptions buildOptions()
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ShintiaraOptions();
     }
     
 }
