@@ -16,6 +16,7 @@
 package net.unknowndomain.alea.systems.shintiara;
 
 import net.unknowndomain.alea.messages.MsgBuilder;
+import net.unknowndomain.alea.random.SingleResult;
 import net.unknowndomain.alea.roll.GenericResult;
 
 /**
@@ -24,15 +25,15 @@ import net.unknowndomain.alea.roll.GenericResult;
  */
 public class ShintiaraResults extends GenericResult
 {
-    private final Integer result;
-    private final Integer assetResult;
+    private final SingleResult<Integer> result;
+    private final SingleResult<Integer> assetResult;
     private boolean autoSuccess;
     private boolean criticalSuccess;
     private boolean criticalFailure;
     private boolean success;
     private boolean showAsset = false;
     
-    public ShintiaraResults(Integer result, Integer assetResult)
+    public ShintiaraResults(SingleResult<Integer> result, SingleResult<Integer> assetResult)
     {
         this.result = result;
         this.assetResult = assetResult;
@@ -78,12 +79,12 @@ public class ShintiaraResults extends GenericResult
         this.success = success;
     }
 
-    public Integer getResult()
+    public SingleResult<Integer> getResult()
     {
         return result;
     }
 
-    public Integer getAssetResult()
+    public SingleResult<Integer> getAssetResult()
     {
         return assetResult;
     }
@@ -115,10 +116,10 @@ public class ShintiaraResults extends GenericResult
         if (verbose)
         {
             messageBuilder.append("Roll ID: ").append(getUuid()).appendNewLine();
-            messageBuilder.append("Result: ").append(getResult());
+            messageBuilder.append("Result: ").append(getResult().getLabel()).append(" => ").append(getResult().getValue());
             if (showAsset)
             {
-                messageBuilder.append(" Asset: ").append(getAssetResult() * 10);
+                messageBuilder.append(" Asset: ").append(getAssetResult().getValue() * 10);
             }
             messageBuilder.appendNewLine();
         }

@@ -21,8 +21,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import net.unknowndomain.alea.dice.standard.D10;
-import net.unknowndomain.alea.dice.standard.D100;
+import net.unknowndomain.alea.random.SingleResult;
+import net.unknowndomain.alea.random.dice.bag.D10;
+import net.unknowndomain.alea.random.dice.bag.D100;
 import net.unknowndomain.alea.roll.GenericResult;
 import net.unknowndomain.alea.roll.GenericRoll;
 
@@ -72,26 +73,27 @@ public class ShintiaraRoll implements GenericRoll
     @Override
     public GenericResult getResult()
     {
-        ShintiaraResults results = buildResults(D100.INSTANCE.roll(), (D10.INSTANCE.roll() -1));
+        SingleResult<Integer> assetDice = new SingleResult<>("d10 -1", D10.INSTANCE.nextResult().get().getValue() - 1);
+        ShintiaraResults results = buildResults(D100.INSTANCE.nextResult().get(), assetDice);
         results.setShowAsset(netVantage != 0);
         results.setVerbose(mods.contains(ShintiaraModifiers.VERBOSE));
         return results;
     }
     
-    private ShintiaraResults buildResults(Integer result, Integer assetDice)
+    private ShintiaraResults buildResults(SingleResult<Integer> result, SingleResult<Integer> assetDice)
     {
         ShintiaraResults results = new ShintiaraResults(result, assetDice);
         BigDecimal tgt = new BigDecimal(target);
         int criticalThreshold = tgt.divide(new BigDecimal(2), 0, RoundingMode.CEILING).intValue();
-        if (result == 1)
+        if (result.getValue() == 1)
         {
             results.setAutoSuccess(true);
         }
-        if (result <= criticalThreshold)
+        if (result.getValue() <= criticalThreshold)
         {
             results.setCriticalSuccess(true);
         }
-        if (result >= 95)
+        if (result.getValue() >= 95)
         {
             results.setCriticalFailure(true);
             results.setSuccess(false);
@@ -101,10 +103,10 @@ public class ShintiaraRoll implements GenericRoll
             int vantage = 0;
             if (netVantage != 0)
             {
-                vantage = (Math.abs(netVantage) < assetDice) ? Math.abs(netVantage) : assetDice; 
+                vantage = (Math.abs(netVantage) < assetDice.getValue()) ? Math.abs(netVantage) : assetDice.getValue(); 
                 vantage = (netVantage > 0) ? vantage * -10 : vantage * 10;
             }
-            int adjRes = result + vantage;
+            int adjRes = result.getValue() + vantage;
             results.setSuccess((adjRes <= target));
         }
         return results;
