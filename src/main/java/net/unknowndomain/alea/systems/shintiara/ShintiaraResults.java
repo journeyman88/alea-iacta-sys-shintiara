@@ -17,14 +17,16 @@ package net.unknowndomain.alea.systems.shintiara;
 
 import net.unknowndomain.alea.messages.MsgBuilder;
 import net.unknowndomain.alea.random.SingleResult;
-import net.unknowndomain.alea.roll.GenericResult;
+import net.unknowndomain.alea.roll.LocalizedResult;
 
 /**
  *
  * @author journeyman
  */
-public class ShintiaraResults extends GenericResult
+public class ShintiaraResults extends LocalizedResult
 {
+    private final static String BUNDLE_NAME = "net.unknowndomain.alea.systems.blacksad.RpgSystemBundle";
+    
     private final SingleResult<Integer> result;
     private final SingleResult<Integer> assetResult;
     private boolean autoSuccess;
@@ -94,32 +96,32 @@ public class ShintiaraResults extends GenericResult
     {
         if (isAutoSuccess())
         {
-            messageBuilder.append("Automatic success");
+            messageBuilder.append(translate("shintiara.results.autoSuccess"));
         }
         else if (isCriticalSuccess())
         {
-            messageBuilder.append("Critical success");
+            messageBuilder.append(translate("shintiara.results.criticalSuccess"));
         }
         else if (isCriticalFailure())
         {
-            messageBuilder.append("Critical failure");
+            messageBuilder.append(translate("shintiara.results.criticalFailure"));
         }
         else if (isSuccess())
         {
-            messageBuilder.append("Success");
+            messageBuilder.append(translate("shintiara.results.success"));
         }
         else
         {
-            messageBuilder.append("Failure");
+            messageBuilder.append(translate("shintiara.results.failure"));
         }
         messageBuilder.appendNewLine();
         if (verbose)
         {
             messageBuilder.append("Roll ID: ").append(getUuid()).appendNewLine();
-            messageBuilder.append("Result: ").append(getResult().getLabel()).append(" => ").append(getResult().getValue());
+            messageBuilder.append(translate("shintiara.results.diceResults")).append(getResult().getLabel()).append(" => ").append(getResult().getValue());
             if (showAsset)
             {
-                messageBuilder.append(" Asset: ").append(getAssetResult().getValue() * 10);
+                messageBuilder.append(translate("shintiara.results.asset", (getAssetResult().getValue() * 10)));
             }
             messageBuilder.appendNewLine();
         }
@@ -133,6 +135,12 @@ public class ShintiaraResults extends GenericResult
     public void setShowAsset(boolean showAsset)
     {
         this.showAsset = showAsset;
+    }
+
+    @Override
+    protected String getBundleName()
+    {
+        return BUNDLE_NAME;
     }
 
 }

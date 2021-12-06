@@ -20,6 +20,7 @@ import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import net.unknowndomain.alea.random.SingleResult;
 import net.unknowndomain.alea.random.dice.bag.D10;
@@ -37,13 +38,14 @@ public class ShintiaraRoll implements GenericRoll
     private final int target;
     private final int netVantage;
     private final Set<ShintiaraModifiers> mods;
+    private final Locale lang;
     
-    public ShintiaraRoll(Integer target, Integer advantage, Integer disadvantage, ShintiaraModifiers ... mod)
+    public ShintiaraRoll(Integer target, Integer advantage, Integer disadvantage, Locale lang, ShintiaraModifiers ... mod)
     {
-        this(target, advantage, disadvantage, Arrays.asList(mod));
+        this(target, advantage, disadvantage, lang, Arrays.asList(mod));
     }
     
-    public ShintiaraRoll(Integer target, Integer advantage, Integer disadvantage, Collection<ShintiaraModifiers> mod)
+    public ShintiaraRoll(Integer target, Integer advantage, Integer disadvantage, Locale lang, Collection<ShintiaraModifiers> mod)
     {
         this.mods = new HashSet<>();
         if (mod != null)
@@ -68,6 +70,7 @@ public class ShintiaraRoll implements GenericRoll
         }
         this.netVantage = advantage - disadvantage;
         this.target = target;
+        this.lang = lang;
     }
     
     @Override
@@ -77,6 +80,7 @@ public class ShintiaraRoll implements GenericRoll
         ShintiaraResults results = buildResults(D100.INSTANCE.nextResult().get(), assetDice);
         results.setShowAsset(netVantage != 0);
         results.setVerbose(mods.contains(ShintiaraModifiers.VERBOSE));
+        results.setLang(lang);
         return results;
     }
     

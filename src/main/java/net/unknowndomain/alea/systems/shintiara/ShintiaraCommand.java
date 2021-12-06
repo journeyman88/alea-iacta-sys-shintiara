@@ -61,7 +61,7 @@ public class ShintiaraCommand extends RpgSystemCommand
         else
         {
             ShintiaraOptions opt = (ShintiaraOptions) options;
-            ShintiaraRoll roll = new ShintiaraRoll(opt.getTargetValue(), opt.getAdvantageValue(), opt.getDisadvantageValue(), opt.getModifiers());
+            ShintiaraRoll roll = new ShintiaraRoll(opt.getTargetValue(), opt.getAdvantageValue(), opt.getDisadvantageValue(), lang, opt.getModifiers());
             retVal = Optional.of(roll);
         }
         return retVal;
